@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel | SOC Analyst & SIEM Engineering Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b',
+                        accent: '#3b82f6'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-darkbg text-slate-100 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation / Executive Header -->
+    <header class="bg-cardbg border-b border-slate-800 sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="bg-blue-600 text-white p-2 rounded-lg font-bold"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+                <h1 class="text-lg font-bold tracking-wide">Daniel | Security Engineering & SOC Portfolio</h1>
+                <p class="text-xs text-slate-400">Wazuh SIEM Architecture, Incident Triage, & Threat Hunting</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span class="w-2 h-2 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span> SIEM Lab: Operational (v4.14.9)
+            </span>
+            <button onclick="triggerLiveTelemetry()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition flex items-center shadow-lg shadow-blue-500/20">
+                <i class="fa-solid fa-bolt mr-1.5"></i> Generate Telemetry Burst
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+
+        <!-- Professional Banner -->
+        <div class="bg-gradient-to-r from-blue-900/40 via-slate-900 to-indigo-900/40 border border-blue-500/30 p-5 rounded-xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h2 class="text-base font-semibold text-blue-400"><i class="fa-solid fa-network-wired mr-2"></i> Security Operations & Threat Monitoring Infrastructure</h2>
+                <p class="text-xs text-slate-300 mt-1 max-w-3xl">
+                    Specializing in deploying containerized SIEM environments, analyzing behavioral telemetry, parsing system logs, and executing rapid incident response playbooks aligned with the MITRE ATT&CK framework.
+                </p>
+            </div>
+            <div class="flex gap-2 shrink-0">
+                <span class="text-xs bg-slate-800 border border-slate-700 px-2.5 py-1 rounded text-slate-300"><i class="fa-solid fa-certificate text-amber-400 mr-1"></i> Google Cybersecurity Certified</span>
+                <span class="text-xs bg-slate-800 border border-slate-700 px-2.5 py-1 rounded text-slate-300"><i class="fa-brands fa-docker text-blue-400 mr-1"></i> Docker & SIEM Lab</span>
+            </div>
+        </div>
+
+        <!-- Metric Cards Row -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-cardbg border border-slate-800 p-4 rounded-xl">
+                <p class="text-xs text-slate-400 font-medium">Total Events Analyzed</p>
+                <div class="flex items-baseline justify-between mt-2">
+                    <h3 id="stat-total" class="text-2xl font-bold">1,482</h3>
+                    <span class="text-xs text-emerald-400 font-semibold">+12% hr</span>
+                </div>
+            </div>
+            <div class="bg-cardbg border border-slate-800 p-4 rounded-xl">
+                <p class="text-xs text-slate-400 font-medium">High Severity Alerts (L8+)</p>
+                <div class="flex items-baseline justify-between mt-2">
+                    <h3 id="stat-high" class="text-2xl font-bold text-amber-400">34</h3>
+                    <span class="text-xs text-amber-400 font-semibold">Action Req</span>
+                </div>
+            </div>
+            <div class="bg-cardbg border border-slate-800 p-4 rounded-xl">
+                <p class="text-xs text-slate-400 font-medium">Active Agents Connected</p>
+                <div class="flex items-baseline justify-between mt-2">
+                    <h3 class="text-2xl font-bold text-blue-400">1</h3>
+                    <span class="text-xs text-slate-400">ubuntu-lab (Docker)</span>
+                </div>
+            </div>
+            <div class="bg-cardbg border border-slate-800 p-4 rounded-xl">
+                <p class="text-xs text-slate-400 font-medium">MITRE Techniques Mapped</p>
+                <div class="flex items-baseline justify-between mt-2">
+                    <h3 class="text-2xl font-bold text-indigo-400">4</h3>
+                    <span class="text-xs text-indigo-400 font-semibold">Coverage Active</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Threat Hunting Log Stream Table -->
+        <div class="bg-cardbg border border-slate-800 rounded-xl overflow-hidden shadow-lg">
+            <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-desktop text-blue-500"></i>
+                    <h3 class="font-semibold text-sm">Live Wazuh Threat Hunting Stream</h3>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="logFilter" onkeyup="filterLogs()" placeholder="Filter logs (e.g., 5760, sshd)..." class="bg-slate-900 border border-slate-700 text-xs rounded-lg px-3 py-1.5 text-slate-200 focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-900/50 text-slate-400 border-b border-slate-800">
+                            <th class="p-3 font-medium">Timestamp</th>
+                            <th class="p-3 font-medium">Agent</th>
+                            <th class="p-3 font-medium">Rule ID</th>
+                            <th class="p-3 font-medium">Level</th>
+                            <th class="p-3 font-medium">Description</th>
+                            <th class="p-3 font-medium">Source IP</th>
+                            <th class="p-3 font-medium text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTableBody" class="divide-y divide-slate-800">
+                        <!-- Dynamic rows injected via script -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-cardbg border-t border-slate-800 py-4 px-6 text-center text-xs text-slate-500">
+        SOC Portfolio SIEM Dashboard &bull; Built with HTML5, Tailwind CSS, & Simulated Wazuh JSON Telemetry
+    </footer>
+
+    <!-- Script to handle live log simulation & table filtering -->
+    <script>
+        let logs = [
+            { time: "2026-11-07 08:18:11", agent: "ubuntu-lab", id: "2502", level: "10", desc: "syslog: User missed the password more than one time", ip: "192.168.1.45" },
+            { time: "2026-11-07 08:18:09", agent: "ubuntu-lab", id: "5760", level: "5", desc: "sshd: authentication failed.", ip: "192.168.1.45" },
+            { time: "2026-11-07 08:17:53", agent: "ubuntu-lab", id: "5760", level: "5", desc: "sshd: authentication failed.", ip: "192.168.1.45" },
+            { time: "2026-11-07 08:17:43", agent: "ubuntu-lab", id: "5503", level: "5", desc: "PAM: User login failed.", ip: "127.0.0.1" },
+            { time: "2026-11-07 08:19:57", agent: "ubuntu-lab", id: "5402", level: "3", desc: "Successful sudo to ROOT executed.", ip: "127.0.0.1" }
+        ];
+
+        function renderLogs() {
+            const tbody = document.getElementById('logTableBody');
+            tbody.innerHTML = '';
+            logs.forEach((log, index) => {
+                let badgeColor = log.level >= 8 ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : (log.level >= 5 ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-slate-700/30 text-slate-300 border-slate-700');
+                let row = `
+                    <tr class="hover:bg-slate-800/40 transition">
+                        <td class="p-3 text-slate-400">${log.time}</td>
+                        <td class="p-3 font-mono text-slate-300">${log.agent}</td>
+                        <td class="p-3 font-mono font-bold text-blue-400">${log.id}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded text-xs border ${badgeColor}">Level ${log.level}</span></td>
+                        <td class="p-3 text-slate-200">${log.desc}</td>
+                        <td class="p-3 font-mono text-slate-400">${log.ip}</td>
+                        <td class="p-3 text-right">
+                            <button onclick="alert('Triage Playbook Triggered for Rule ${log.id} from IP ${log.ip}. Active Response simulated.')" class="bg-slate-800 hover:bg-blue-600 text-slate-300 hover:text-white px-2.5 py-1 rounded transition text-xs">Triage</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function triggerLiveTelemetry() {
+            const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            const randomIps = ["45.33.32.156", "185.220.101.5", "103.253.41.12", "192.168.1.105"];
+            const randomIp = randomIps[Math.floor(Math.random() * randomIps.length)];
+            
+            const newLog = {
+                time: now,
+                agent: "ubuntu-lab",
+                id: Math.random() > 0.5 ? "5760" : "2502",
+                level: Math.random() > 0.5 ? "8" : "10",
+                desc: "Brute Force Attack Detected: Multiple SSH login failures",
+                ip: randomIp
+            };
+            
+            logs.unshift(newLog);
+            renderLogs();
+            
+            let totalEl = document.getElementById('stat-total');
+            totalEl.innerText = parseInt(totalEl.innerText.replace(',', '')) + 1;
+        }
+
+        function filterLogs() {
+            let input = document.getElementById('logFilter').value.toLowerCase();
+            let rows = document.getElementById('logTableBody').getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                let text = rows[i].textContent.toLowerCase();
+                rows[i].style.display = text.includes(input) ? '' : 'none';
+            }
+        }
+
+        window.onload = renderLogs;
+    </script>
+</body>
+</html>
